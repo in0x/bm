@@ -13,9 +13,12 @@ void ABmGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
 	UGameplayStatics::CreatePlayer(GetWorld(), 0, true);
 	APlayerController* spawnedController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	spawnedController->GetCharacter()->AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+	UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	spawnedController = UGameplayStatics::GetPlayerController(GetWorld(), 1);
 	spawnedController->GetCharacter()->AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
