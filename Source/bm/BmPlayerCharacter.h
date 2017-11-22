@@ -6,9 +6,6 @@
 #include "GameFramework/Character.h"
 #include "BmPlayerCharacter.generated.h"
 
-class USpringArmComponent;
-class UCameraComponent;
-
 UCLASS()
 class BM_API ABmPlayerCharacter : public ACharacter
 {
@@ -24,12 +21,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	UPROPERTY(EditAnywhere)
-	USpringArmComponent* springArmComponent;
-
-	UPROPERTY(EditAnywhere)
-	UCameraComponent* cameraComponent;
-
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 };

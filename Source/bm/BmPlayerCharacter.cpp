@@ -1,20 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BmPlayerCharacter.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
-	cameraComponent = ObjectInitializer.CreateDefaultSubobject<UCameraComponent>(this, TEXT("Camera"));
-	springArmComponent = ObjectInitializer.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("SpringArm"));
-
-	springArmComponent->SetupAttachment(GetRootComponent());
-	cameraComponent->SetupAttachment(springArmComponent);
 }
 
 void ABmPlayerCharacter::BeginPlay()
