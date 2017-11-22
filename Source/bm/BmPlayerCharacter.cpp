@@ -11,7 +11,7 @@ ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializ
 
 void ABmPlayerCharacter::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
 }
 
 void ABmPlayerCharacter::Tick(float DeltaTime)
