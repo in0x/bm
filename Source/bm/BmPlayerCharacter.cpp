@@ -3,6 +3,8 @@
 #include "BmPlayerCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
 {
@@ -23,6 +25,18 @@ void ABmPlayerCharacter::BeginPlay()
 void ABmPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector movement = GetMovementComponent()->GetLastInputVector();
+	movement.Normalize();
+
+	if (movement.SizeSquared() > 0.f)
+	{
+		float yaw = movement.HeadingAngle();
+		yaw = UKismetMathLibrary::RadiansToDegrees(yaw);
+		FRotator rotation(0.f, yaw, 0.f);
+
+		GetRootComponent()->SetWorldRotation(rotation);
+	}
 }
 
 void ABmPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
