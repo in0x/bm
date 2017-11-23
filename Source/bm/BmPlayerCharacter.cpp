@@ -31,22 +31,4 @@ void ABmPlayerCharacter::Tick(float DeltaTime)
 	}
 }
 
-void ABmPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ABmPlayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ABmPlayerCharacter::MoveRight);
-}
-
-void ABmPlayerCharacter::MoveForward(float Value)
-{
-	FVector direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	AddMovementInput(direction, Value);
-}
-
-void ABmPlayerCharacter::MoveRight(float Value)
-{
-	FVector direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-	AddMovementInput(direction, Value);
-}
