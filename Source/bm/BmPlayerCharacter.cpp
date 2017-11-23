@@ -7,6 +7,10 @@
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
 }
 
 void ABmPlayerCharacter::BeginPlay()
