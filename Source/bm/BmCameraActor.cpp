@@ -14,24 +14,46 @@ ABmCameraActor::ABmCameraActor(const FObjectInitializer& ObjectInitializer /*= F
 
 	springArmComponent->SetupAttachment(GetRootComponent());
 	cameraComponent->SetupAttachment(springArmComponent);
+
+	SetRootComponent(springArmComponent);
 }
 
 void ABmCameraActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	controller->SetViewTargetWithBlend(this);
 }
 
 void ABmCameraActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	FVector selfPosition = GetActorLocation();
-	FVector playerPosition = controller->GetFocalLocation();
+	FVector playerPosition = FVector::ZeroVector;
 
-	RootComponent->SetWorldLocation(FVector(playerPosition.X, playerPosition.Y, selfPosition.Z));
+	for (APlayerController* tracked : trackedControllers)
+	{
+		playerPosition += tracked->GetFocalLocation();
+	}
+
+	float longestDistance = minCameraHeight;
+	int32 numControllers = trackedControllers.Num();
+
+	for (int32 i = 1; i < numControllers; ++i)
+	{
+		float distance = FVector::Dist(trackedControllers[i]->GetFocalLocation(), trackedControllers[i - 1]->GetFocalLocation());
+		longestDistance = FMath::Max(longestDistance, distance);
+	}
+	longestDistance = FMath::Min(longestDistance, maxCameraHeight);
+
+	FVector selfPosition = GetActorLocation();
+	playerPosition /= trackedControllers.Num();
+	RootComponent->SetWorldLocation(FVector(playerPosition.X, playerPosition.Y, longestDistance));
 }
+
+void ABmCameraActor::RegisterControllerToTrack(APlayerController* controller)
+{
+	controller->SetViewTargetWithBlend(this);
+	trackedControllers.Add(controller);
+}
+
 

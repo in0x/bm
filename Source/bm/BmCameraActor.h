@@ -21,10 +21,21 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	void RegisterControllerToTrack(APlayerController* controller);
+
 private:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* springArmComponent;
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* cameraComponent;
+
+	UPROPERTY(EditAnywhere)
+	float minCameraHeight;
+
+	UPROPERTY(EditAnywhere)
+	float maxCameraHeight;
+
+	UPROPERTY(Transient)
+	TArray<APlayerController*> trackedControllers;
 };
