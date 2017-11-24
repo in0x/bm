@@ -6,6 +6,8 @@
 #include "Kismet/KismetMathLibrary.h"
 
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
+	: Super(ObjectInitializer)
+	, overridenBombRange(0.0f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -26,11 +28,11 @@ void ABmPlayerCharacter::Tick(float DeltaTime)
 	FVector movement = GetMovementComponent()->GetLastInputVector();
 	movement.Normalize();
 
-	if (movement.SizeSquared() > 0.f)
+	if (movement.SizeSquared() > 0.0f)
 	{
 		float yaw = movement.HeadingAngle();
 		yaw = UKismetMathLibrary::RadiansToDegrees(yaw);
-		FRotator rotation(0.f, yaw, 0.f);
+		FRotator rotation(0.0f, yaw, 0.0f);
 
 		GetRootComponent()->SetWorldRotation(rotation);
 	}
@@ -61,6 +63,11 @@ void ABmPlayerCharacter::PlaceBomb()
 	placedBombs.Add(spawnedActor);
 	spawnedActor->BombExploded.AddDynamic(this, &ABmPlayerCharacter::OnBombExploded);
 
+	if (overridenBombRange > 0.0f)
+	{
+		spawnedActor->SetExplodeRange(overridenBombRange);
+	}
+
 	spawnedActor->FinishSpawning(GetTransform());
 }
 
@@ -79,3 +86,9 @@ void ABmPlayerCharacter::SetMaxBombCount(int32 Count)
 {
 	maxBombCount = Count;
 }
+
+void ABmPlayerCharacter::SetBombRangeOverride(float BombRange)
+{
+	overridenBombRange = BombRange;
+}
+

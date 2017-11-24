@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetMaxBombCount(int32 Count);
 
+	UFUNCTION(BlueprintCallable)
+	void SetBombRangeOverride(float BombRange);
+
 private:
 	UFUNCTION()
 	void OnBombExploded(ABmBaseBombActor* ExplodedBomb);
@@ -45,6 +48,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int32 maxBombCount;
+
+	UPROPERTY(EditAnywhere)
+	float overridenBombRange;
 	
 	UPROPERTY()
 	TArray<ABmBaseBombActor*> placedBombs;
