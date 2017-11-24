@@ -3,6 +3,7 @@
 #include "BmPlayerCharacter.h"
 #include "Bomb/BmBaseBombActor.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
@@ -58,7 +59,8 @@ void ABmPlayerCharacter::PlaceBomb()
 	}
 
 	FVector forward = GetActorForwardVector();
-	FVector location = GetActorLocation();
+	FVector location =  GetActorLocation();
+	location.Y -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 
 	ABmBaseBombActor* spawnedActor = GetWorld()->SpawnActorDeferred<ABmBaseBombActor>(bombClass.Get(), GetTransform(), nullptr, this);
 
