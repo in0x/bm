@@ -30,6 +30,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetBombClass(TSubclassOf<ABmBaseBombActor> BombClass);
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetMaxBombCount();
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxBombCount(int32 Count);
+
 private:
 	UFUNCTION()
 	void OnBombExploded(ABmBaseBombActor* ExplodedBomb);

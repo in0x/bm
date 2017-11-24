@@ -69,3 +69,13 @@ void ABmPlayerCharacter::OnBombExploded(ABmBaseBombActor* ExplodedBomb)
 	ExplodedBomb->BombExploded.RemoveDynamic(this, &ABmPlayerCharacter::OnBombExploded);
 	placedBombs.Remove(ExplodedBomb);
 }
+
+int32 ABmPlayerCharacter::GetMaxBombCount()
+{
+	return maxBombCount;
+}
+
+void ABmPlayerCharacter::SetMaxBombCount(int32 Count)
+{
+	maxBombCount = Count;
+}
