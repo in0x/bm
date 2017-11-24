@@ -37,7 +37,7 @@ TArray<FHitResult> ABmBaseBombActor::Trace(UWorld* world, FVector Start, FVector
 	FCollisionQueryParams CollisionParams("OverlapAll", true, /*Instigator*/nullptr);
 	CollisionParams.AddIgnoredActors(IgnoredActors);
 
-	ECollisionChannel hitScanChannel = GetCollsionChannelByName("OverlapAll");
+	ECollisionChannel hitScanChannel = GetCollsionChannelByName("BombExplosion");
 
 	world->LineTraceMultiByChannel(result, Start, End, hitScanChannel, CollisionParams);
 
@@ -64,8 +64,8 @@ void ABmBaseBombActor::Explode_Implementation()
 				  0,
 				  10.f);
 
-	TArray<FHitResult> result_x = Trace(GetWorld(), location - FVector(explodeRange, 0, 0), location + FVector(explodeRange, 0, 0), {});
-	TArray<FHitResult> result_y = Trace(GetWorld(), location - FVector(0, explodeRange, 0), location + FVector(0, explodeRange, 0), {});
+	TArray<FHitResult> result_x = Trace(GetWorld(), location - FVector(explodeRange, 0, 0), location + FVector(explodeRange, 0, 0), {this});
+	TArray<FHitResult> result_y = Trace(GetWorld(), location - FVector(0, explodeRange, 0), location + FVector(0, explodeRange, 0), {this});
 
 	BombExploded.Broadcast(this);
 
