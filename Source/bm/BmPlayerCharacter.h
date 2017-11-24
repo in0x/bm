@@ -60,5 +60,8 @@ private:
 	float overridenBombRange;
 	
 	UPROPERTY()
+	UMaterialInstanceDynamic* materialInstance;
+
+	UPROPERTY()
 	TArray<ABmBaseBombActor*> placedBombs;
 };

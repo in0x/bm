@@ -5,6 +5,8 @@
 #include "Bomb/BmBaseBombActor.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
@@ -25,6 +27,9 @@ ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializ
 void ABmPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	materialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	materialInstance->SetVectorParameterValue(FName("BodyColor"), FMath::VRand());
 }
 
 void ABmPlayerCharacter::Tick(float DeltaTime)
