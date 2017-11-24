@@ -23,13 +23,13 @@ protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnCharacterPickedUp(ABmPlayerCharacter* Character);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UHealthComponent* healthComponent;
+
 private:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 	UFUNCTION()
 	void OnKilled();
-
-	UPROPERTY(EditAnywhere)
-	UHealthComponent* healthComponent;
 };
