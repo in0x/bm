@@ -11,6 +11,7 @@ ABmGameMode::ABmGameMode(const FObjectInitializer& ObjectInitializer /*= FObject
 	: Super(ObjectInitializer)
 	, cameraActorInstance(nullptr)
 {
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 APawn* ABmGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
@@ -56,6 +57,27 @@ void ABmGameMode::BeginPlay()
 	CreatePlayer(1);
 }
 
+void ABmGameMode::Tick(float DeltaSeconds)
+{
+	bool bAnyPlayerDied = false;
+	bool bAllPlayersDied = true;
+
+	for (ABmPlayerCharacter* player : players)
+	{
+		bAnyPlayerDied |= !player->IsAlive();
+		bAllPlayersDied &= !player->IsAlive();
+	}
+
+	if (bAllPlayersDied)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("Both players died."));
+	}
+	else if (bAnyPlayerDied)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("One player died."));
+	}
+}
+
 void ABmGameMode::CreatePlayer(int32 ControllerID)
 {
 	APlayerController* spawnedController = UGameplayStatics::GetPlayerController(GetWorld(), ControllerID);
@@ -68,6 +90,7 @@ void ABmGameMode::CreatePlayer(int32 ControllerID)
 	ABmPlayerCharacter* player = CastChecked<ABmPlayerCharacter>(spawnedController->GetCharacter());
 	player->AutoPossessPlayer = EAutoReceiveInput::Player0;
 	cameraActorInstance->RegisterControllerToTrack(spawnedController);
+	players.Add(player);
 }
 
 

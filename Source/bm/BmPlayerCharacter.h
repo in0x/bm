@@ -7,6 +7,7 @@
 #include "BmPlayerCharacter.generated.h"
 
 class ABmBaseBombActor;
+class UHealthComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRemoteBombTriggered, ABmBaseBombActor*, TriggeredBomb);
 
@@ -39,12 +40,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetBombRangeOverride(float BombRange);
 
+	UFUNCTION(BlueprintCallable)
+	bool IsAlive();
+
 private:
 	UFUNCTION()
 	void OnBombExploded(ABmBaseBombActor* ExplodedBomb);
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ABmBaseBombActor> bombClass;
+
+	UPROPERTY(EditAnywhere)
+	UHealthComponent* healthComponent;
 
 	UPROPERTY(EditAnywhere)
 	int32 maxBombCount;

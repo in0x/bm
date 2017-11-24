@@ -8,6 +8,7 @@
 #include "BmGameMode.generated.h"
 
 class ABmCameraActor;
+class ABmPlayerCharacter;
 
 UCLASS()
 class BM_API ABmGameMode : public AGameModeBase
@@ -21,6 +22,8 @@ public:
 
 	virtual void StartPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
 
 	virtual APlayerController* SpawnPlayerController(ENetRole InRemoteRole, FVector const& SpawnLocation, FRotator const& SpawnRotation) override;
@@ -33,4 +36,7 @@ private:
 
 	UPROPERTY(Transient)
 	ABmCameraActor* cameraActorInstance;
+
+	UPROPERTY(Transient)
+	TArray<ABmPlayerCharacter*> players;
 };

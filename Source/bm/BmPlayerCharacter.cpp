@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BmPlayerCharacter.h"
+#include "HealthComponent.h"
 #include "Bomb/BmBaseBombActor.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -17,6 +18,8 @@ ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	bUseControllerRotationRoll = false;
 
 	bCanBeDamaged = true;
+
+	healthComponent = ObjectInitializer.CreateDefaultSubobject<UHealthComponent>(this, TEXT("HealthComponent"));
 }
 
 void ABmPlayerCharacter::BeginPlay()
@@ -94,5 +97,10 @@ void ABmPlayerCharacter::SetMaxBombCount(int32 Count)
 void ABmPlayerCharacter::SetBombRangeOverride(float BombRange)
 {
 	overridenBombRange = BombRange;
+}
+
+bool ABmPlayerCharacter::IsAlive()
+{
+	return healthComponent->GetHealthPercent() > 0.0f;
 }
 
