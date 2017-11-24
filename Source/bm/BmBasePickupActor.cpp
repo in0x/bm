@@ -2,13 +2,15 @@
 
 #include "BmBasePickupActor.h"
 #include "BmPlayerCharacter.h"
+#include "HealthComponent.h"
 
 namespace
 {
 	const FName PICKUP_COLLISION_PROFILE_NAME("OverlapAll");
 }
 
-ABmBasePickupActor::ABmBasePickupActor()
+ABmBasePickupActor::ABmBasePickupActor(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
+	: Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
@@ -20,11 +22,18 @@ ABmBasePickupActor::ABmBasePickupActor()
 	meshComponent->SetCollisionProfileName(PICKUP_COLLISION_PROFILE_NAME);
 
 	meshComponent->SetSimulatePhysics(false);
+
+	healthComponent = ObjectInitializer.CreateDefaultSubobject<UHealthComponent>(this, TEXT("HealthComponent"));
+
+	bCanBeDamaged = true;
 }
 
 void ABmBasePickupActor::BeginPlay()
 {
+	Super::BeginPlay();
+
 	OnActorBeginOverlap.AddDynamic(this, &ABmBasePickupActor::OnBeginOverlap);
+	healthComponent->MinHealthReached.AddDynamic(this, &ABmBasePickupActor::OnKilled);
 }
 
 void ABmBasePickupActor::OnCharacterPickedUp_Implementation(ABmPlayerCharacter* Character)
@@ -40,6 +49,10 @@ void ABmBasePickupActor::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherAc
 	}
 }
 
+void ABmBasePickupActor::OnKilled()
+{
+	Destroy();
+}
 
 
 

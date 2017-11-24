@@ -14,6 +14,8 @@ ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
+
+	bCanBeDamaged = true;
 }
 
 void ABmPlayerCharacter::BeginPlay()

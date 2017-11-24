@@ -30,6 +30,9 @@ public:
 	FMinHealthReached MinHealthReached;
 
 private:
+	UFUNCTION()
+	void HandleDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+
 	UPROPERTY(EditAnywhere)
 	float health;
 

@@ -6,6 +6,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "BmBasePickupActor.generated.h"
 
+class UHealthComponent;
 class ABmPlayerCharacter;
 
 UCLASS()
@@ -14,7 +15,7 @@ class BM_API ABmBasePickupActor : public AStaticMeshActor
 	GENERATED_BODY()
 
 public:
-	ABmBasePickupActor();
+	ABmBasePickupActor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void BeginPlay() override;
 
@@ -25,4 +26,10 @@ protected:
 private:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+	UFUNCTION()
+	void OnKilled();
+
+	UPROPERTY(EditAnywhere)
+	UHealthComponent* healthComponent;
 };

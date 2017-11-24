@@ -6,6 +6,7 @@
 ABmBaseBombActor::ABmBaseBombActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bCanBeDamaged = true;
 }
 
 void ABmBaseBombActor::SetExplodeRange(float Range)
@@ -40,7 +41,6 @@ TArray<FHitResult> ABmBaseBombActor::Trace(UWorld* world, FVector Start, FVector
 	ECollisionChannel hitScanChannel = GetCollsionChannelByName("BombExplosion");
 
 	world->LineTraceMultiByChannel(result, Start, End, hitScanChannel, CollisionParams);
-
 	return result;
 }
 
@@ -64,8 +64,33 @@ void ABmBaseBombActor::Explode_Implementation()
 				  0,
 				  10.f);
 
-	TArray<FHitResult> result_x = Trace(GetWorld(), location - FVector(explodeRange, 0, 0), location + FVector(explodeRange, 0, 0), {this});
-	TArray<FHitResult> result_y = Trace(GetWorld(), location - FVector(0, explodeRange, 0), location + FVector(0, explodeRange, 0), {this});
+	TArray<FHitResult> result_xPos = Trace(GetWorld(), location, location + FVector(explodeRange, 0, 0), { this });
+	TArray<FHitResult> result_xNeg = Trace(GetWorld(), location, location - FVector(explodeRange, 0, 0), { this });
+
+	TArray<FHitResult> result_yPos = Trace(GetWorld(), location, location + FVector(0, explodeRange, 0), { this });
+	TArray<FHitResult> result_yNeg = Trace(GetWorld(), location, location - FVector(0, explodeRange, 0), { this });
+
+	AController* instigator = GetInstigator()->GetController();
+
+	for (FHitResult hit : result_xPos)
+	{
+		hit.Actor->TakeDamage(100.f, FDamageEvent(), instigator, this);
+	}
+
+	for (FHitResult hit : result_xNeg)
+	{
+		hit.Actor->TakeDamage(100.f, FDamageEvent(), instigator, this);
+	}
+
+	for (FHitResult hit : result_yPos)
+	{
+		hit.Actor->TakeDamage(100.f, FDamageEvent(), instigator, this);
+	}
+
+	for (FHitResult hit : result_yNeg)
+	{
+		hit.Actor->TakeDamage(100.f, FDamageEvent(), instigator, this);
+	}
 
 	BombExploded.Broadcast(this);
 
