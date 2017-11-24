@@ -29,7 +29,8 @@ void ABmPlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	materialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
-	materialInstance->SetVectorParameterValue(FName("BodyColor"), FMath::VRand());
+	meshColor = FMath::VRand();
+	materialInstance->SetVectorParameterValue(FName("BodyColor"), meshColor);
 }
 
 void ABmPlayerCharacter::Tick(float DeltaTime)
@@ -112,3 +113,7 @@ bool ABmPlayerCharacter::IsAlive()
 	return healthComponent->GetHealthPercent() > 0.0f;
 }
 
+FVector ABmPlayerCharacter::GetMeshColor()
+{
+	return meshColor;
+}

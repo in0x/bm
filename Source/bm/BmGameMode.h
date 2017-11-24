@@ -37,6 +37,10 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void RestartGame();
+
+	UPROPERTY(Transient, BlueprintReadWrite)
+	TArray<ABmPlayerCharacter*> players;
+
 private:
 	void CreatePlayer(int32 ControllerID);
 
@@ -45,7 +49,4 @@ private:
 
 	UPROPERTY(Transient)
 	ABmCameraActor* cameraActorInstance;
-
-	UPROPERTY(Transient)
-	TArray<ABmPlayerCharacter*> players;
 };

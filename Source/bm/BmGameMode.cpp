@@ -74,7 +74,8 @@ void ABmGameMode::Tick(float DeltaSeconds)
 	}
 	else if (bAnyPlayerDied)
 	{
-		GameEndedWin(0); // TODO(Phil): Show correct player id
+		int32 idxOfDeadPlayer = players.IndexOfByPredicate([](ABmPlayerCharacter* Player) { return Player->IsAlive(); });
+		GameEndedWin(idxOfDeadPlayer); 
 	}
 
 	if (bAllPlayersDied || bAnyPlayerDied)

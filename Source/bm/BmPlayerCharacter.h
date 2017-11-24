@@ -43,6 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsAlive();
 
+	UFUNCTION(BlueprintCallable)
+	FVector GetMeshColor();
+
 private:
 	UFUNCTION()
 	void OnBombExploded(ABmBaseBombActor* ExplodedBomb);
@@ -61,6 +64,8 @@ private:
 	
 	UPROPERTY()
 	UMaterialInstanceDynamic* materialInstance;
+
+	FVector meshColor;
 
 	UPROPERTY()
 	TArray<ABmBaseBombActor*> placedBombs;
