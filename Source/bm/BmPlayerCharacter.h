@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "BmPlayerCharacter.generated.h"
 
+class ABmBaseBombActor;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRemoteBombTriggered, ABmBaseBombActor*, TriggeredBomb);
+
 UCLASS()
 class BM_API ABmPlayerCharacter : public ACharacter
 {
@@ -17,4 +21,25 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+
+	void PlaceBomb();
+
+	UPROPERTY(BlueprintAssignable)
+	FRemoteBombTriggered RemoteBombTriggered;
+
+	UFUNCTION(BlueprintCallable)
+	void SetBombClass(TSubclassOf<ABmBaseBombActor> BombClass);
+
+private:
+	UFUNCTION()
+	void OnBombExploded(ABmBaseBombActor* ExplodedBomb);
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABmBaseBombActor> bombClass;
+
+	UPROPERTY(EditAnywhere)
+	int32 maxBombCount;
+	
+	UPROPERTY()
+	TArray<ABmBaseBombActor*> placedBombs;
 };

@@ -19,8 +19,9 @@ public:
 	virtual void SetupInputComponent() override;
 
 private:
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	void OnMoveForward(float Value);
+	void OnMoveRight(float Value);
+	void OnPlaceBomb();
 
 	FName MoveForwardBindingName;
 	FName MoveRightBindingName;

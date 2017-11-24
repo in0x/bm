@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BmPlayerCharacter.h"
+#include "Bomb/BmBaseBombActor.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -35,4 +36,36 @@ void ABmPlayerCharacter::Tick(float DeltaTime)
 	}
 }
 
+void ABmPlayerCharacter::SetBombClass(TSubclassOf<ABmBaseBombActor> BombClass)
+{
+	bombClass = BombClass;
+}
 
+void ABmPlayerCharacter::PlaceBomb()
+{
+	if (RemoteBombTriggered.IsBound())
+	{
+		RemoteBombTriggered.Broadcast(placedBombs.Pop());
+	}
+
+	if (placedBombs.Num() >= maxBombCount)
+	{
+		return;
+	}
+
+	FVector forward = GetActorForwardVector();
+	FVector location = GetActorLocation();
+
+	ABmBaseBombActor* spawnedActor = GetWorld()->SpawnActorDeferred<ABmBaseBombActor>(bombClass.Get(), GetTransform(), nullptr, this);
+
+	placedBombs.Add(spawnedActor);
+	spawnedActor->BombExploded.AddDynamic(this, &ABmPlayerCharacter::OnBombExploded);
+
+	spawnedActor->FinishSpawning(GetTransform());
+}
+
+void ABmPlayerCharacter::OnBombExploded(ABmBaseBombActor* ExplodedBomb)
+{
+	ExplodedBomb->BombExploded.RemoveDynamic(this, &ABmPlayerCharacter::OnBombExploded);
+	placedBombs.Remove(ExplodedBomb);
+}
