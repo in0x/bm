@@ -5,7 +5,6 @@
 UHealthComponent::UHealthComponent()
 	: Super()
 	, health(100.f)
-	, minHealth(0.f)
 	, maxHealth(100.f)
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -29,9 +28,9 @@ void UHealthComponent::IncreaseHealth(float Value)
 
 void UHealthComponent::DecreaseHealth(float Value)
 {
-	health = FMath::Max(minHealth, health - Value);
+	health = FMath::Max(0.0f, health - Value);
 
-	if (health <= minHealth)
+	if (health <= 0.0f)
 	{
 		MinHealthReached.Broadcast();
 	}
@@ -41,4 +40,11 @@ void UHealthComponent::HandleDamage(AActor* DamagedActor, float Damage, const UD
 {
 	DecreaseHealth(Damage);
 }
+
+float UHealthComponent::GetHealthPercent()
+{
+	return static_cast<float>(health) / static_cast<float>(maxHealth);
+}
+
+
 

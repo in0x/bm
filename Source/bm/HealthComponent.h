@@ -26,6 +26,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DecreaseHealth(float Value);
 
+	// Returns the current health as a float in range 0 - 1
+	UFUNCTION(BlueprintCallable)
+	float GetHealthPercent();
+	
 	UPROPERTY(BlueprintAssignable)
 	FMinHealthReached MinHealthReached;
 
@@ -35,9 +39,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float health;
-
-	UPROPERTY(EditAnywhere)
-	float minHealth;
 
 	UPROPERTY(EditAnywhere)
 	float maxHealth;
