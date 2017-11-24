@@ -74,7 +74,7 @@ void ABmGameMode::Tick(float DeltaSeconds)
 	}
 	else if (bAnyPlayerDied)
 	{
-		GameEndedWin(0);
+		GameEndedWin(0); // TODO(Phil): Show correct player id
 	}
 
 	if (bAllPlayersDied || bAnyPlayerDied)

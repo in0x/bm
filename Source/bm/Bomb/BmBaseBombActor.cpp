@@ -1,12 +1,31 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BmBaseBombActor.h"
+#include "HealthComponent.h"
 #include "Engine.h"
 
-ABmBaseBombActor::ABmBaseBombActor()
+ABmBaseBombActor::ABmBaseBombActor(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
+	: Super(ObjectInitializer)
+	, bExplodeNextTick(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	bCanBeDamaged = true;
+
+	healthComponent = ObjectInitializer.CreateDefaultSubobject<UHealthComponent>(this, TEXT("HealthComponent"));
+}
+
+void ABmBaseBombActor::BeginPlay()
+{
+	Super::BeginPlay();
+	healthComponent->MinHealthReached.AddDynamic(this, &ABmBaseBombActor::OnKilled);
+}
+
+void ABmBaseBombActor::Tick(float DeltaSeconds)
+{
+	if (bExplodeNextTick)
+	{
+		Explode_Implementation();
+	}
 }
 
 void ABmBaseBombActor::SetExplodeRange(float Range)
@@ -47,6 +66,8 @@ TArray<FHitResult> ABmBaseBombActor::Trace(UWorld* world, FVector Start, FVector
 void ABmBaseBombActor::Explode_Implementation()
 {
 	FVector location = GetActorLocation();
+	float halfMeshHeight = GetStaticMeshComponent()->GetCollisionShape().GetSphereRadius();
+	location.Z += halfMeshHeight;
 
 	DrawDebugLine(GetWorld(), 
 				  location - FVector(explodeRange, 0, 0), location + FVector(explodeRange, 0, 0), 
@@ -94,7 +115,10 @@ void ABmBaseBombActor::Explode_Implementation()
 
 	BombExploded.Broadcast(this);
 
-	Destroy();
+	Destroy(false);
 }
 
-
+void ABmBaseBombActor::OnKilled()
+{
+	bExplodeNextTick = true;
+}

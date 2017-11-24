@@ -63,9 +63,12 @@ void ABmPlayerCharacter::PlaceBomb()
 
 	FVector forward = GetActorForwardVector();
 	FVector location =  GetActorLocation();
-	location.Y -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	location.Z -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 
-	ABmBaseBombActor* spawnedActor = GetWorld()->SpawnActorDeferred<ABmBaseBombActor>(bombClass.Get(), GetTransform(), nullptr, this);
+	FTransform transform = GetTransform();
+	transform.SetLocation(location);
+
+	ABmBaseBombActor* spawnedActor = GetWorld()->SpawnActorDeferred<ABmBaseBombActor>(bombClass.Get(), transform, nullptr, this);
 
 	placedBombs.Add(spawnedActor);
 	spawnedActor->BombExploded.AddDynamic(this, &ABmPlayerCharacter::OnBombExploded);
@@ -75,7 +78,7 @@ void ABmPlayerCharacter::PlaceBomb()
 		spawnedActor->SetExplodeRange(overridenBombRange);
 	}
 
-	spawnedActor->FinishSpawning(GetTransform());
+	spawnedActor->FinishSpawning(transform);
 }
 
 void ABmPlayerCharacter::OnBombExploded(ABmBaseBombActor* ExplodedBomb)
