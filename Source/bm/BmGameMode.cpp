@@ -70,12 +70,33 @@ void ABmGameMode::Tick(float DeltaSeconds)
 
 	if (bAllPlayersDied)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("Both players died."));
+		GameEndedDraw();
 	}
 	else if (bAnyPlayerDied)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Purple, TEXT("One player died."));
+		GameEndedWin(0);
 	}
+
+	if (bAllPlayersDied || bAnyPlayerDied)
+	{
+		for (ABmPlayerCharacter* player : players)
+		{
+			APlayerController* ctrl = CastChecked<APlayerController>(player->GetController());
+			if (ctrl != nullptr)
+			{
+				ctrl->DisableInput(ctrl);
+
+				ctrl->bShowMouseCursor = true;
+				ctrl->bEnableClickEvents = true;
+				ctrl->bEnableMouseOverEvents = true;
+			}
+		}
+	}
+}
+
+void ABmGameMode::RestartGame()
+{
+	GetWorld()->ServerTravel("?Restart");
 }
 
 void ABmGameMode::CreatePlayer(int32 ControllerID)
@@ -93,5 +114,11 @@ void ABmGameMode::CreatePlayer(int32 ControllerID)
 	players.Add(player);
 }
 
+void ABmGameMode::GameEndedDraw_Implementation()
+{
+}
 
+void ABmGameMode::GameEndedWin_Implementation(int32 WinningPlayerID)
+{
+}
 

@@ -28,6 +28,15 @@ public:
 
 	virtual APlayerController* SpawnPlayerController(ENetRole InRemoteRole, FVector const& SpawnLocation, FRotator const& SpawnRotation) override;
 
+protected: 
+	UFUNCTION(BlueprintNativeEvent)
+	void GameEndedDraw();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void GameEndedWin(int32 WinningPlayerID);
+
+	UFUNCTION(BlueprintCallable)
+	void RestartGame();
 private:
 	void CreatePlayer(int32 ControllerID);
 

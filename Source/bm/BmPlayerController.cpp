@@ -22,14 +22,20 @@ void ABmPlayerController::SetupInputComponent()
 
 void ABmPlayerController::OnMoveForward(float Value)
 {
-	FVector direction = FRotationMatrix(GetControlRotation()).GetScaledAxis(EAxis::X);
-	GetPawn()->AddMovementInput(direction, Value);
+	if (Value != 0.0f)
+	{
+		FVector direction = FRotationMatrix(GetControlRotation()).GetScaledAxis(EAxis::X);
+		GetPawn()->AddMovementInput(direction, Value);
+	}
 }
 
 void ABmPlayerController::OnMoveRight(float Value)
 {
-	FVector direction = FRotationMatrix(GetControlRotation()).GetScaledAxis(EAxis::Y);
-	GetPawn()->AddMovementInput(direction, Value);
+	if (Value != 0.0f)
+	{
+		FVector direction = FRotationMatrix(GetControlRotation()).GetScaledAxis(EAxis::Y);
+		GetPawn()->AddMovementInput(direction, Value);
+	}
 }
 
 void ABmPlayerController::OnPlaceBomb()
