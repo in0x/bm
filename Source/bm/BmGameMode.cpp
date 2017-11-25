@@ -4,6 +4,7 @@
 #include "BmPlayerCharacter.h"
 #include "BmPlayerController.h"
 #include "BmCameraActor.h"
+#include "BmGameInstance.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -55,6 +56,9 @@ void ABmGameMode::BeginPlay()
 
 	CreatePlayer(0);
 	CreatePlayer(1);
+
+	UBmGameInstance* instance = CastChecked<UBmGameInstance>(GetGameInstance());
+	instance->roundsPlayed++;
 }
 
 void ABmGameMode::Tick(float DeltaSeconds)
@@ -75,6 +79,10 @@ void ABmGameMode::Tick(float DeltaSeconds)
 	else if (bAnyPlayerDied)
 	{
 		int32 idxOfDeadPlayer = players.IndexOfByPredicate([](ABmPlayerCharacter* Player) { return Player->IsAlive(); });
+		
+		UBmGameInstance* instance = CastChecked<UBmGameInstance>(GetGameInstance());
+		int32 score = instance->playerScores[idxOfDeadPlayer]++;
+		
 		GameEndedWin(idxOfDeadPlayer); 
 	}
 
