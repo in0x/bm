@@ -72,6 +72,8 @@ void ABmGameMode::Tick(float DeltaSeconds)
 		bAllPlayersDied &= !player->IsAlive();
 	}
 
+	bAllPlayersDied |= bGameTimeElapsed;
+
 	if (bAllPlayersDied)
 	{
 		GameEndedDraw();
@@ -131,3 +133,7 @@ void ABmGameMode::GameEndedWin_Implementation(int32 WinningPlayerID)
 {
 }
 
+void ABmGameMode::SetGameTimeElapsed()
+{
+	bGameTimeElapsed = true;
+}

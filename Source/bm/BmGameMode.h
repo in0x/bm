@@ -28,6 +28,9 @@ public:
 
 	virtual APlayerController* SpawnPlayerController(ENetRole InRemoteRole, FVector const& SpawnLocation, FRotator const& SpawnRotation) override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetGameTimeElapsed();
+
 protected: 
 	UFUNCTION(BlueprintNativeEvent)
 	void GameEndedDraw();
@@ -49,4 +52,6 @@ private:
 
 	UPROPERTY(Transient)
 	ABmCameraActor* cameraActorInstance;
+
+	bool bGameTimeElapsed;
 };
