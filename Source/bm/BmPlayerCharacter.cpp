@@ -12,6 +12,7 @@
 ABmPlayerCharacter::ABmPlayerCharacter(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
 	: Super(ObjectInitializer)
 	, overridenBombRange(0.0f)
+	, bombPlaceDistance(100.0f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -70,14 +71,12 @@ void ABmPlayerCharacter::PlaceBomb()
 	FVector forward = GetActorForwardVector();
 	FVector location =  GetActorLocation();
 	location.Z -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	location += forward * bombPlaceDistance;
 
 	FTransform transform = GetTransform();
 	transform.SetLocation(location);
 
 	ABmBaseBombActor* spawnedActor = GetWorld()->SpawnActorDeferred<ABmBaseBombActor>(bombClass.Get(), transform, nullptr, this);
-
-	placedBombs.Add(spawnedActor);
-	spawnedActor->BombExploded.AddDynamic(this, &ABmPlayerCharacter::OnBombExploded);
 
 	if (overridenBombRange > 0.0f)
 	{
@@ -85,6 +84,9 @@ void ABmPlayerCharacter::PlaceBomb()
 	}
 
 	spawnedActor->FinishSpawning(transform);
+
+	placedBombs.Add(spawnedActor);
+	spawnedActor->BombExploded.AddDynamic(this, &ABmPlayerCharacter::OnBombExploded);
 }
 
 void ABmPlayerCharacter::OnBombExploded(ABmBaseBombActor* ExplodedBomb)

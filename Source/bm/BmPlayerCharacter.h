@@ -61,6 +61,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float overridenBombRange;
+
+	// How far away from the player bombs should be placed.
+	UPROPERTY(EditAnywhere)
+	float bombPlaceDistance;
 	
 	UPROPERTY()
 	UMaterialInstanceDynamic* materialInstance;
